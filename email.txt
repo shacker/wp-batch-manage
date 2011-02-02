@@ -1,0 +1,28 @@
+SAMPLE EMAIL TO USERS - EDIT TO SUIT YOUR ENVIRONMENT, AND UPDATE TEXT TO MATCH EACH RELEASE
+
+Hi Birdhouse bloggers - 
+
+A quick note to let you know that your WordPress site or blog has been upgraded to version 3.0.1. This is a fairly major update with many new features. For more information, see:
+
+http://codex.wordpress.org/Version_3.0
+
+As you know, we held off on the WordPress 3 upgrade until the 3.0.1 bug fix release emerged, which it now has. Information on 3.0.1 is here:
+
+http://wordpress.org/news/2010/07/wordpress-3-0-1/
+
+
+When you next access the back-end of your site, you may see the message Database upgrade required. Just click the Upgrade button and the system will be ready to use.
+
+We are fairly certain that this upgrade will not affect the functionality of your site. If you find that anything doesn't work as expected, please let us know so we can fix it.
+
+Reminder: Birdhouse handles all upgrades of WordPress installations on a system-wide basis. Please do not attempt to upgrade your blog outside of our system. If you need a hand, let us know!
+
+If you notice anything not working quite right on your blog, please contact us. 
+
+Thanks and best,
+Scot Hacker
+
+--
+Birdhouse Hosting
+Custom web and mail hosting services
+http://hosting.birdhouse.org	
