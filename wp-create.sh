@@ -150,6 +150,7 @@ mkdir -p wp-content/uploads
 chown -R $owner:$owner *
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
+chmod 600 wp-config.php
 
 ####################################################
 # Report
