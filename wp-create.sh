@@ -1,15 +1,16 @@
 #!/bin/sh
 
-# WP-Create 1.1 :: Creates a new client WP installation via svn in 30 seconds.
-# Designed to be used in conjunction with wp-mass-upgrade.sh: http://birdhouse.org/software/2007/07/wp-mass-upgrade/
-# i.e. One script to do quick WP svn checkouts, database setup, etc. and another to mass upgrade all WP installations on a server.
+# WP-Create 1.2 :: Creates a new client WP installation via svn quickly.
+# Use wp-mass-upgrade.sh to upgrade sites, i.e. One script to do quick WP svn checkouts, 
+# database setup, etc. and another to mass upgrade all WP installations on a server.
+# See the readme for information on why this script no longer creates databases.
 
 # Scot Hacker :: http://birdhouse.org/blog
 
 # This script performs the following tasks:
 # * Gather installation info
 # * Create install dir and check out a copy of WordPress
-# * Create database, db user, set db privs via external .sql file
+# * Create database (not currently doing this), db user, set db privs via external .sql file
 # * Create WP config file
 # * Create upload dir and set filesystem permissions
 # * Generate array line for wp-sites.sh
@@ -20,7 +21,7 @@
 DBROOT="dppass"
 
 # Full path to the svn binary on your system (use 'which svn' to obtain if not sure)
-svnpath='/usr/local/bin/svn'
+svnpath='/usr/bin/svn'
 
 ####################################################
 # Gather data
@@ -90,7 +91,7 @@ $svnpath co http://svn.automattic.com/wordpress/tags/$wpver/ .
 
 ####################################################
 # Create database, db user, set db privs via external .sql file
-
+# Temporarily not working until cPanel db API problems are worked out.
 
 
 cat <<EOT >$install_path/wp-db.sql
@@ -100,7 +101,8 @@ FLUSH PRIVILEGES;
 EOT
 
 # Feed the db
-mysql -u root -p$DBROOT < $install_path/wp-db.sql
+# This is temporarily commented out until the cPanel db API problems are worked out
+# mysql -u root -p$DBROOT < $install_path/wp-db.sql
 
 # Clean up
 rm $install_path/wp-db.sql
@@ -141,18 +143,20 @@ require_once(ABSPATH.'wp-settings.php');
 EOT
 
 ####################################################
-# Create upload dir and set filesystem permissions
+# Create upload dir and set filesystem permissions.
+# Note that perms are set for phpsuexec systems - this 
+# will need to be tweaked if not using phpsuexec.
 mkdir -p wp-content/uploads
-chown -R $owner:$owner $install_path/
-chmod -R 777 wp-content/uploads wp-content/themes
-
+chown -R $owner:$owner *
+find . -type d -exec chmod 755 {} \;
+find . -type f -exec chmod 644 {} \;
 
 ####################################################
 # Report
 echo
 echo "Installation complete. Please visit http://$url to complete setup."
 echo
-echo "Add this line to wp-sites.sh (change number 23 when adding):"
+echo "Add this line to wp-sites.sh:"
 echo "\"$install_path|$url|$email|$owner\""
 echo
 

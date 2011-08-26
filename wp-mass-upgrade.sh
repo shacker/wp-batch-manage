@@ -1,5 +1,5 @@
 #!/bin/sh
-# wp-mass-upgrade.sh v1.1
+# wp-mass-upgrade.sh v1.2
 # Batch-update WordPress .svn installations.
 # Iterate over array of installations and split vars into components:
 # path|URL|email|owner
@@ -11,7 +11,7 @@
 scriptpath='/root/scripts/wp-mass-tools'
 
 # Full path to the svn binary on your system (use 'which svn' to obtain if not sure)
-svnpath='/usr/local/bin/svn'
+svnpath='/usr/bin/svn'
 
 mailpath='/bin/mail'
 
@@ -44,9 +44,8 @@ echo "Upgrading blogs to $ver"
 echo
 
 # Iterate through array, upgrading each
-for blog in ${site[@]}
+for blog in ${sites[@]}
 do
-	#echo $blog
 	dir=$(echo $blog | cut -f1 -d\|)
 	url=$(echo $blog | cut -f2 -d\|)
 	email=$(echo $blog | cut -f3 -d\|)
@@ -57,8 +56,13 @@ do
 	echo "E-mail: $email"
 	echo "User: $owner"	
 	echo
+  
+  # Safeguard - in case the array of sites has a blank line at the end. 
+  # Bail out before we start changing permissions on the wrong file!
+  if [[ $dir != */home/* ]]; then  echo "Script is working in the wrong place - remove blank lines from your array. Exiting"; exit; fi
 
-    cd $dir
+
+  cd $dir
 
 	# Back up the existing db. We'll only keep one copy, overwriting the old.
 	if [ -f $dbname.sql.gz ]
@@ -67,9 +71,9 @@ do
     fi	
 	
 	dbname=`grep -i "db_name" wp-config.php | sed s/define\(\'DB_NAME\',\ //g | sed s/\).*$//g | sed s/\'//g`
-    mysqldump $dbname > $dbname.sql
-    gzip $dbname.sql
-    chown -R $owner:$owner $dbname.sql.gz
+  mysqldump $dbname > $dbname.sql
+  gzip $dbname.sql
+  chown -R $owner:$owner $dbname.sql.gz
 	echo "Backed up database as $dbname.sql.gz."   
 	
 	# For the 2.x - 3.0 upgrade  - back up the default theme directory in case site owner
@@ -77,19 +81,19 @@ do
 	if [ -d "wp-content/themes/default" ]
     then
     	cp -r wp-content/themes/default wp-content/themes/default-bak 
-        chown -R $owner:$owner * wp-content/themes/default-bak
     fi
 
-    # OK, let's do the upgrade.	
-    cd $dir
-    $svnpath sw $wptagurl .
+  # OK, let's do the upgrade.	
+  cd $dir
+  $svnpath sw $wptagurl .
 	echo 
 	echo "If no errors shown above, upgrade successful."
 	echo "Fixing permissions..."
-	chgrp nobody $dir
-    chown -R $owner:$owner *
-    chown -R $owner:nobody wp-content
-    chmod -R g+w wp-content/uploads
+	# Setting perms for phpusexec systems - tweak if on a non-phpsuexec system
+	
+  chown -R $owner:$owner *
+  find . -type d -exec chmod 755 {} \;
+  find . -type f -exec chmod 644 {} \;
 	echo
     
     	
