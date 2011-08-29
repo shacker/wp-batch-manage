@@ -78,10 +78,6 @@ do
   
   # NEW location - Stick a db backup in the home dir
   backupdbpath="/home/${owner}/${dbname}.sql.gz"
-  echo "db name is"
-  echo $dbname
-  echo "new path is"
-  echo $backupdbpath
   if [ -f $backupdbpath ]
     then
     	rm -f $backupdbpath
