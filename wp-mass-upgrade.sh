@@ -58,23 +58,34 @@ do
 	echo
   
   # Safeguard - in case the array of sites has a blank line at the end. 
-  # Bail out before we start changing permissions on the wrong file!
+  # Bail out before we start changing permissions on the wrong files!
   if [[ $dir != */home/* ]]; then  echo "Script is working in the wrong place - remove blank lines from your array. Exiting"; exit; fi
 
-
+  # From here on, do all work in the installation directory
   cd $dir
 
 	# Back up the existing db. We'll only keep one copy, overwriting the old.
+	# To accomodate old versions of the script, which put the db backup in the current dir,
+	# we check both in the current dir and in the home (the new location)
+	# OLD location
 	if [ -f $dbname.sql.gz ]
     then
     	rm -f $dbname.sql.gz
-    fi	
+  fi
+  
+  # NEW location - Stick a db backup in the home dir
+  backupdbpath="/home/${owner}/${dbname}.sql.gz"
+  if [ -f $backupdbpath ]
+    then
+    	rm -f $backupdbpath
+  fi
 	
 	dbname=`grep -i "db_name" wp-config.php | sed s/define\(\'DB_NAME\',\ //g | sed s/\).*$//g | sed s/\'//g`
   mysqldump $dbname > $dbname.sql
   gzip $dbname.sql
   chown -R $owner:$owner $dbname.sql.gz
-	echo "Backed up database as $dbname.sql.gz."   
+  mv $dbname.sql.gz $backupdbpath
+	echo "Backed up database as $backupdbpath."   
 	
 	# For the 2.x - 3.0 upgrade  - back up the default theme directory in case site owner
 	# was using or had modified it - otherwise the svn update command will delete it!

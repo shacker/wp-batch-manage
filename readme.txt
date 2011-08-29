@@ -1,4 +1,4 @@
-WP-Mass-Tools v1.2.1
+WP-Mass-Tools v1.2.2
 Scot Hacker (shacker@birdhouse.org)
 http://birdhouse.org/software
 
@@ -45,6 +45,6 @@ VERSION NOTES:
 
 1.1 Updated to use array of sites in a separate file
 
-1.2 No longer attempts to create the database on cPanel systems. Changes permissions modification to work on phpsuexec servers. In other words, it no longer changes ownership to user:nobody, but to user:user. Added protection against a situation - a bug - where if the array of sites had a blank line at the end, it would cd to / and start changing permissions!
+1.2 No longer attempts to create the database on cPanel systems. Changes permissions modification to work on phpsuexec servers. In other words, it no longer changes ownership to user:nobody, but to user:user. Now storing the backed up database in the user's home, not within public_html. Added protection against a situation - a bug - where if the array of sites had a blank line at the end, it would cd to / and start changing permissions!
 
 
