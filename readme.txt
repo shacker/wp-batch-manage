@@ -1,4 +1,4 @@
-WP-Mass-Tools v1.2.2
+WP-Mass-Tools v1.2.3
 Scot Hacker (shacker@birdhouse.org)
 http://birdhouse.org/software
 

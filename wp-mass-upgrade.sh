@@ -63,7 +63,10 @@ do
 
   # From here on, do all work in the installation directory
   cd $dir
-
+  
+	# Get the database name fro the config
+	dbname=`grep -i "db_name" wp-config.php | sed s/define\(\'DB_NAME\',\ //g | sed s/\).*$//g | sed s/\'//g`
+	
 	# Back up the existing db. We'll only keep one copy, overwriting the old.
 	# To accomodate old versions of the script, which put the db backup in the current dir,
 	# we check both in the current dir and in the home (the new location)
@@ -75,12 +78,16 @@ do
   
   # NEW location - Stick a db backup in the home dir
   backupdbpath="/home/${owner}/${dbname}.sql.gz"
+  echo "db name is"
+  echo $dbname
+  echo "new path is"
+  echo $backupdbpath
   if [ -f $backupdbpath ]
     then
     	rm -f $backupdbpath
   fi
 	
-	dbname=`grep -i "db_name" wp-config.php | sed s/define\(\'DB_NAME\',\ //g | sed s/\).*$//g | sed s/\'//g`
+
   mysqldump $dbname > $dbname.sql
   gzip $dbname.sql
   chown -R $owner:$owner $dbname.sql.gz
