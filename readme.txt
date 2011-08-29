@@ -10,6 +10,8 @@ HOW TO USE WP-MASS-TOOLS
 
 Unzip the package to a directory somewhere safe on the server (such as /root/scripts/wp-mass-tools/*)
 
+Rename wp-sites-dist.sh to wp-sites.sh. This way you can upgrade this package in the future without overwriting your sites array.
+
 Edit a couple of variables at the top of wp-mass-plugins.sh and wp-mass-upgrade.sh, setting the path to where the tools are kept, the path to svn on your server, and the path to the "mail" binary on your server. You'll also be putting the server's root db password in some of these - PROTECT THE WHOLE DIRECTORY WITH CHMOD 700!!!
 
 TO INSTALL NEW WORDPRESS SITES:
