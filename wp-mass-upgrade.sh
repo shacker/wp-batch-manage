@@ -1,5 +1,4 @@
 #!/bin/sh
-# wp-mass-upgrade.sh v1.2
 # Batch-update WordPress .svn installations.
 # We now assume you have SuPHP installed - perms are set to owner, not nobody!
 

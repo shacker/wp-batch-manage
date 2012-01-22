@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# WP-Create 1.2 :: Creates a new client WP installation via svn quickly.
+# WP-Create Creates a new client WP installation via svn quickly.
 # Use wp-mass-upgrade.sh to upgrade sites, i.e. One script to do quick WP svn checkouts, 
 # database setup, etc. and another to mass upgrade all WP installations on a server.
 # See the readme for information on why this script no longer creates databases.
