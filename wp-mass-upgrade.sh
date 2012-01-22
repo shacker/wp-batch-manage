@@ -1,11 +1,14 @@
 #!/bin/sh
 # wp-mass-upgrade.sh v1.2
 # Batch-update WordPress .svn installations.
+# We now assume you have SuPHP installed - perms are set to owner, not nobody!
+
 # Iterate over array of installations and split vars into components:
 # path|URL|email|owner
 # cd to path, back up db run svn sw [to latest tag release]
 # Send email to owner noting new features and that one-click db upgrade may be required.
 
+# If you want to send email announcements only without modifing files, use wp-mass-email.sh
 
 # Path on server where wp-mass-tools are kept:
 scriptpath='/root/scripts/wp-mass-tools'
@@ -22,7 +25,7 @@ echo -n "WordPress version? "; read ver
 wptagurl="http://svn.automattic.com/wordpress/tags/$ver/"
 
 
-echo -n "Upgrading all blogs to version $ver. Is this correct? (y/n) "
+echo -n "Upgrading sites to version $ver. Is this correct? (y/n) "
 read answer
 if [ $answer != "y" ]; then
   echo  "Halting. Try again."
@@ -61,7 +64,7 @@ do
   # Bail out before we start changing permissions on the wrong files!
   if [[ $dir != */home/* ]]; then  echo "Script is working in the wrong place - remove blank lines from your array. Exiting"; exit; fi
 
-  # From here on, do all work in the installation directory
+  # From here on, do all work is in the installation directory
   cd $dir
   
 	# Get the database name fro the config
@@ -97,19 +100,19 @@ do
     	cp -r wp-content/themes/default wp-content/themes/default-bak 
     fi
 
-  # OK, let's do the upgrade.	
-  cd $dir
-  $svnpath sw $wptagurl .
+    # OK, let's do the upgrade.	
+    cd $dir
+    $svnpath sw $wptagurl .
 	echo 
 	echo "If no errors shown above, upgrade successful."
 	echo "Fixing permissions..."
-	# Setting perms for phpusexec systems - tweak if on a non-phpsuexec system
-	
-  chown -R $owner:$owner *
-  find . -type d -exec chmod 755 {} \;
-  find . -type f -exec chmod 644 {} \;
-  chmod 600 wp-config.php
-	echo
+
+    # Setting perms for phpusexec systems - tweak if on a non-phpsuexec system	
+    chown -R $owner:$owner *
+    find . -type d -exec chmod 755 {} \;
+    find . -type f -exec chmod 644 {} \;
+    chmod 600 wp-config.php
+    echo
     
     	
 	# Send announcement email
