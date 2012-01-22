@@ -47,7 +47,7 @@ do
 
     	
 	# Send announcement email
-    echo "$msgtext" | $mailpath -s $subjline $email < $scriptpath/email.txt
+    echo "$msgtext" | $mailpath -s "$subjline" $email < $scriptpath/email.txt
     echo
     echo "Announcement email sent to $email"
     echo "------------------------------------"
